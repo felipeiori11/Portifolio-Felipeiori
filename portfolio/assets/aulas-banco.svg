@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Modelagem de Banco de Dados</title>
+  <desc id="desc">Ilustração de entidades relacionadas em um modelo de banco de dados.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#171332"/>
+      <stop offset="1" stop-color="#372460"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ef9bff"/>
+      <stop offset="1" stop-color="#6ed6ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="28" fill="url(#bg)"/>
+  <circle cx="1080" cy="120" r="210" fill="#ef9bff" opacity=".12"/>
+  <text x="72" y="92" fill="#ffffff" font-family="Arial, sans-serif" font-size="30" font-weight="700">MODELAGEM DE BANCO DE DADOS</text>
+  <text x="72" y="130" fill="#e7c9ff" font-family="Arial, sans-serif" font-size="22">Entidades, relacionamentos e estrutura</text>
+  <path d="M395 330H520M680 330H805M602 407V510" stroke="url(#line)" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 10"/>
+  <rect x="90" y="248" width="305" height="170" rx="18" fill="#ffffff" opacity=".97"/>
+  <rect x="90" y="248" width="305" height="48" rx="18" fill="#5b3a91"/>
+  <text x="122" y="279" fill="#ffffff" font-family="Arial, sans-serif" font-size="20" font-weight="700">ALUNO</text>
+  <text x="122" y="335" fill="#332150" font-family="monospace" font-size="18">id_aluno</text>
+  <text x="122" y="370" fill="#5b6670" font-family="monospace" font-size="18">nome</text>
+  <text x="122" y="405" fill="#5b6670" font-family="monospace" font-size="18">email</text>
+  <rect x="520" y="248" width="285" height="170" rx="18" fill="#ffffff" opacity=".97"/>
+  <rect x="520" y="248" width="285" height="48" rx="18" fill="#2e7790"/>
+  <text x="552" y="279" fill="#ffffff" font-family="Arial, sans-serif" font-size="20" font-weight="700">MATRÍCULA</text>
+  <text x="552" y="335" fill="#183c4a" font-family="monospace" font-size="18">id_matricula</text>
+  <text x="552" y="370" fill="#5b6670" font-family="monospace" font-size="18">id_aluno</text>
+  <text x="552" y="405" fill="#5b6670" font-family="monospace" font-size="18">id_curso</text>
+  <rect x="805" y="248" width="305" height="170" rx="18" fill="#ffffff" opacity=".97"/>
+  <rect x="805" y="248" width="305" height="48" rx="18" fill="#b76ae8"/>
+  <text x="837" y="279" fill="#ffffff" font-family="Arial, sans-serif" font-size="20" font-weight="700">CURSO</text>
+  <text x="837" y="335" fill="#4a255f" font-family="monospace" font-size="18">id_curso</text>
+  <text x="837" y="370" fill="#5b6670" font-family="monospace" font-size="18">nome</text>
+  <text x="837" y="405" fill="#5b6670" font-family="monospace" font-size="18">carga_horaria</text>
+  <rect x="418" y="510" width="368" height="84" rx="18" fill="#0e0b20" stroke="#9c6ae4" stroke-width="2"/>
+  <text x="458" y="548" fill="#e7c9ff" font-family="Arial, sans-serif" font-size="18" font-weight="700">Modelo organizado</text>
+  <text x="458" y="576" fill="#9ba7bd" font-family="Arial, sans-serif" font-size="16">dados consistentes e relacionados</text>
+</svg>

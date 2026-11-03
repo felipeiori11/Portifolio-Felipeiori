@@ -1,0 +1,1004 @@
+{
+  "name": "Automação de Distribuição de Atendimentos — V13 Pública",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1800,
+        0
+      ],
+      "id": "9c9fbc4b-da3b-4667-9661-be1632dda67d",
+      "name": "INICIAR PROCESSAMENTO"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items\n  .filter(item => {\n    const cnpj = String(item.json.CNPJ ?? '').trim();\n    const telefone = String(item.json.TELEFONE ?? '').trim();\n    return cnpj.length > 0 && telefone.length > 0;\n  })\n  .map(item => ({\n    json: {\n      ...item.json,\n      CNPJ: String(item.json.CNPJ ?? '').trim(),\n      TELEFONE: String(item.json.TELEFONE ?? '').trim(),\n      TELEFONE_ORIGINAL: String(item.json.TELEFONE ?? '').trim()\n    }\n  }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1020,
+        0
+      ],
+      "id": "4c90f0b9-fbb6-4b3c-9cd8-a91d7614291d",
+      "name": "Normalizar CNPJ e Telefone"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputItems = $input.all();\n\nreturn inputItems.map((item, index) => {\n  const base = item.json ?? {};\n  const original = String(base.TELEFONE ?? '').trim();\n  const digits = original.replace(/\\D/g, '');\n\n  let e164Digits = digits;\n  if (e164Digits && !e164Digits.startsWith('55') && (e164Digits.length === 10 || e164Digits.length === 11)) {\n    e164Digits = '55' + e164Digits;\n  }\n\n  let localDigits = e164Digits;\n  if (localDigits.startsWith('55') && (localDigits.length === 12 || localDigits.length === 13)) {\n    localDigits = localDigits.slice(2);\n  }\n\n  let localFormatted = '';\n  if (localDigits.length === 11) {\n    localFormatted = `(${localDigits.slice(0, 2)}) ${localDigits.slice(2, 7)}-${localDigits.slice(7)}`;\n  } else if (localDigits.length === 10) {\n    localFormatted = `(${localDigits.slice(0, 2)}) ${localDigits.slice(2, 6)}-${localDigits.slice(6)}`;\n  }\n\n  const e164Formatted = localFormatted\n    ? `+55 ${localFormatted}`\n    : (e164Digits ? `+${e164Digits}` : '');\n\n  return {\n    json: {\n      CNPJ: String(base.CNPJ ?? '').trim(),\n      TELEFONE: e164Digits,\n      TELEFONE_ORIGINAL: original,\n      TELEFONE_DIGITOS_ORIGINAL: digits,\n      TELEFONE_LOCAL: localDigits,\n      TELEFONE_LOCAL_FORMATADO: localFormatted,\n      TELEFONE_E164_FORMATADO: e164Formatted,\n      CONSULTOR_ATUAL: String(base.CONSULTOR ?? '').trim()\n    },\n    pairedItem: { item: index }\n  };\n});",
+        "mode": "runOnceForAllItems"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -780,
+        0
+      ],
+      "id": "0458c92c-6579-4be0-858f-797e85c8d062",
+      "name": "Preparar Busca Chatwoot"
+    },
+    {
+      "parameters": {
+        "url": "={{ 'https://SEU_CHATWOOT.example.com/api/v1/accounts/SEU_ACCOUNT_ID/contacts/search?q=' + encodeURIComponent(String($('Preparar Busca Chatwoot').item.json.TELEFONE_LOCAL ?? '').trim()) }}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"Content-Type\": \"application/json\",\n  \"api_access_token\": \"SEU_API_TOKEN_AQUI\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -220,
+        0
+      ],
+      "id": "f66cae37-f07c-41f3-8752-a54721e8109d",
+      "name": "Buscar Contato Chatwoot",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000,
+      "onError": "stopWorkflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1d4994d8-a272-41f8-9f01-b2cf4bedec98",
+              "leftValue": "={{ Array.isArray($json.payload) ? $json.payload.length : (Array.isArray($json.data?.payload) ? $json.data.payload.length : 0) }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        20,
+        0
+      ],
+      "id": "f4e790c6-9fcd-42ae-afef-5a84c5c7bc30",
+      "name": "Contato Encontrado?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const p = $('Preparar Busca Chatwoot').item.json;\nconst atual = String(p.CONSULTOR_ATUAL ?? '').trim();\n\nconst NOMES_PROIBIDOS = [\"CONSULTOR_INATIVO_A\", \"CONSULTOR_INATIVO_B\", \"CONSULTOR_INATIVO_C\"];\nfunction normalizarNome(valor) {\n  return String(valor ?? '').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')\n    .trim().replace(/\\s+/g, ' ').toLowerCase();\n}\nconst atualEhProibido = NOMES_PROIBIDOS.map(normalizarNome).includes(normalizarNome(atual));\nconst precisaAtualizar = atualEhProibido && normalizarNome(atual) !== normalizarNome('RESPONSAVEL_PADRAO');\n\nreturn {\n  json: {\n    ...p,\n    consultor_final: precisaAtualizar ? 'RESPONSAVEL_PADRAO' : atual,\n    acao: precisaAtualizar ? 'ATUALIZAR' : 'IGNORAR',\n    motivo: atualEhProibido\n      ? 'CONTATO_NAO_ENCONTRADO_CONSULTOR_PROIBIDO_TROCAR_PARA_RESPONSAVEL_PADRAO'\n      : 'CONTATO_NAO_ENCONTRADO_MANTER_CONSULTOR_ATUAL'\n  }\n};",
+        "mode": "runOnceForEachItem"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3020,
+        520
+      ],
+      "id": "cc4cafd7-fddf-4b33-90f2-3e0d019c55cb",
+      "name": "Sem contato — preservar ou corrigir CONSULTOR",
+      "notes": "Processa cada contato não encontrado individualmente, preservando CNPJ/telefone/CONSULTOR_ATUAL e gerando uma decisão por item.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "url": "={{ 'https://SEU_CHATWOOT.example.com/api/v1/accounts/SEU_ACCOUNT_ID/contacts/' + String($json.payload?.[0]?.id ?? $json.data?.payload?.[0]?.id ?? '') + '/conversations' }}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"Content-Type\": \"application/json\",\n  \"api_access_token\": \"SEU_API_TOKEN_AQUI\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1940,
+        -220
+      ],
+      "id": "5b7b091b-50cd-4fe8-b3b1-ba2bc8474151",
+      "name": "Buscar Conversas Chatwoot",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000,
+      "notes": "Lista todas as conversas do contato encontrado.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const itens = $input.all();\nconst primeiro = itens[0]?.json ?? {};\nconst p = {\n  CNPJ: primeiro.CNPJ ?? '',\n  TELEFONE: primeiro.TELEFONE ?? '',\n  TELEFONE_ORIGINAL: primeiro.TELEFONE_ORIGINAL ?? '',\n  TELEFONE_DIGITOS_ORIGINAL: primeiro.TELEFONE_DIGITOS_ORIGINAL ?? '',\n  TELEFONE_LOCAL: primeiro.TELEFONE_LOCAL ?? '',\n  TELEFONE_LOCAL_FORMATADO: primeiro.TELEFONE_LOCAL_FORMATADO ?? '',\n  TELEFONE_E164_FORMATADO: primeiro.TELEFONE_E164_FORMATADO ?? '',\n  CONSULTOR_ATUAL: primeiro.CONSULTOR_ATUAL ?? ''\n};\n\nconst NOMES_ACEITOS = [\"CONSULTOR_A\", \"CONSULTOR_B\", \"CONSULTOR_C\", \"CONSULTOR_D\", \"CONSULTOR_E\"];\n\nconst NOMES_PROIBIDOS = [\"CONSULTOR_INATIVO_A\", \"CONSULTOR_INATIVO_B\", \"CONSULTOR_INATIVO_C\"];\n\nfunction norm(v) {\n  return String(v ?? '')\n    .normalize('NFD')\n    .replace(/[\\u0300-\\u036f]/g, '')\n    .trim()\n    .replace(/\\s+/g, ' ')\n    .toLowerCase();\n}\n\nfunction ts(v) {\n  if (v === null || v === undefined || v === '') return 0;\n  if (typeof v === 'number') return v > 1e12 ? Math.floor(v / 1000) : Math.floor(v);\n  const n = Number(v);\n  if (Number.isFinite(n)) return n > 1e12 ? Math.floor(n / 1000) : Math.floor(n);\n  const ms = Date.parse(v);\n  return Number.isNaN(ms) ? 0 : Math.floor(ms / 1000);\n}\n\nconst aceitos = new Map(NOMES_ACEITOS.map(n => [norm(n), n]));\nconst proibidos = new Set(NOMES_PROIBIDOS.map(norm));\n\nconst atual = String(p.CONSULTOR_ATUAL ?? '').trim();\nconst atualNorm = norm(atual);\nconst atualPermitido = aceitos.has(atualNorm);\nconst atualProibido = proibidos.has(atualNorm);\nconst atualSdr = atualNorm === norm('RESPONSAVEL_PADRAO');\n\nif (atualPermitido) {\n  return [{\n    json: {\n      ...p,\n      consultor_final: atual,\n      consultor_historico_encontrado: null,\n      origem_consultor_historico: null,\n      historico_dentro_30_dias: null,\n      acao: 'IGNORAR',\n      motivo: 'CONSULTOR_ATUAL_JA_PERMITIDO',\n      conversas_analisadas: itens.length,\n      mensagens_analisadas: 0,\n      candidatos_permitidos_encontrados: 0\n    }\n  }];\n}\n\nconst candidatos = [];\nlet mensagensAnalisadas = 0;\nlet conversasAnalisadas = 0;\n\nfor (const item of itens) {\n  const j = item.json ?? {};\n\n  if (j.sem_conversas === true) continue;\n  conversasAnalisadas++;\n\n  const resposta = j.resposta_mensagens ?? {};\n  const mensagens = Array.isArray(resposta.payload)\n    ? resposta.payload\n    : Array.isArray(resposta.messages)\n      ? resposta.messages\n      : [];\n\n  mensagensAnalisadas += mensagens.length;\n\n  // O endpoint de mensagens também devolve meta.assignee.\n  const assigneeNome =\n    resposta?.meta?.assignee?.name ??\n    resposta?.meta?.assignee?.available_name ??\n    j?.conversation_assignee_name ??\n    '';\n\n  const assigneeNorm = norm(assigneeNome);\n  if (assigneeNorm && aceitos.has(assigneeNorm) && !proibidos.has(assigneeNorm)) {\n    candidatos.push({\n      nome: aceitos.get(assigneeNorm),\n      timestamp: ts(j.conversation_last_activity_at),\n      fonte: 'ASSIGNEE_CONVERSA',\n      conversation_id: j.conversation_id\n    });\n  }\n\n  for (const m of mensagens) {\n    // Mensagem privada / nota interna NÃO define quem foi o consultor da conversa.\n    const ehPrivada =\n      m?.private === true ||\n      String(m?.private ?? '').toLowerCase() === 'true' ||\n      m?.is_private === true ||\n      String(m?.is_private ?? '').toLowerCase() === 'true';\n\n    if (ehPrivada) continue;\n\n    const nome =\n      m?.sender?.name ??\n      m?.sender?.available_name ??\n      m?.sender?.display_name ??\n      '';\n\n    const nomeNorm = norm(nome);\n    if (!nomeNorm || !aceitos.has(nomeNorm) || proibidos.has(nomeNorm)) continue;\n\n    candidatos.push({\n      nome: aceitos.get(nomeNorm),\n      timestamp: ts(m?.created_at ?? m?.updated_at ?? j.conversation_last_activity_at),\n      fonte: 'MENSAGEM_PUBLICA_AGENTE',\n      conversation_id: j.conversation_id ?? m?.conversation_id ?? null,\n      message_id: m?.id ?? null\n    });\n  }\n}\n\n// Ordena pelo evento mais recente.\ncandidatos.sort((a, b) => b.timestamp - a.timestamp);\n\nconst agora = Math.floor(Date.now() / 1000);\nconst limite30 = agora - 30 * 24 * 60 * 60;\n\nconst recentes = candidatos.filter(c => c.timestamp >= limite30);\nconst antigos = candidatos.filter(c => c.timestamp < limite30);\n\n// Prioridade: mais recente permitido dentro de 30 dias.\n// Se não houver, mais recente permitido antigo.\nconst escolhido = recentes[0] ?? antigos[0] ?? null;\n\nif (escolhido) {\n  const precisaAtualizar = atualNorm !== norm(escolhido.nome);\n\n  let motivo;\n  if (atualSdr) {\n    motivo = escolhido.timestamp >= limite30\n      ? 'RESPONSAVEL_PADRAO_SUBSTITUIR_POR_PERMITIDO_RECENTE'\n      : 'RESPONSAVEL_PADRAO_SUBSTITUIR_POR_PERMITIDO_ANTIGO';\n  } else if (atualProibido) {\n    motivo = escolhido.timestamp >= limite30\n      ? 'PROIBIDO_SUBSTITUIR_POR_PERMITIDO_RECENTE'\n      : 'PROIBIDO_SUBSTITUIR_POR_PERMITIDO_ANTIGO';\n  } else {\n    motivo = escolhido.timestamp >= limite30\n      ? 'VALOR_NAO_PERMITIDO_SUBSTITUIR_POR_PERMITIDO_RECENTE'\n      : 'VALOR_NAO_PERMITIDO_SUBSTITUIR_POR_PERMITIDO_ANTIGO';\n  }\n\n  return [{\n    json: {\n      ...p,\n      consultor_final: precisaAtualizar ? escolhido.nome : atual,\n      consultor_historico_encontrado: escolhido.nome,\n      origem_consultor_historico: escolhido.fonte,\n      historico_dentro_30_dias: escolhido.timestamp >= limite30,\n      acao: precisaAtualizar ? 'ATUALIZAR' : 'IGNORAR',\n      motivo: precisaAtualizar ? motivo : 'CONSULTOR_ATUAL_JA_IGUAL_AO_ENCONTRADO',\n      conversation_id: escolhido.conversation_id,\n      message_id: escolhido.message_id ?? null,\n      last_activity_at: escolhido.timestamp,\n      conversas_analisadas: conversasAnalisadas,\n      mensagens_analisadas: mensagensAnalisadas,\n      candidatos_permitidos_encontrados: candidatos.length,\n      candidatos_permitidos_recentes: recentes.length\n    }\n  }];\n}\n\n// Não achou nenhum permitido no histórico efetivamente buscado.\nif (atualProibido) {\n  return [{\n    json: {\n      ...p,\n      consultor_final: 'RESPONSAVEL_PADRAO',\n      consultor_historico_encontrado: null,\n      origem_consultor_historico: null,\n      historico_dentro_30_dias: false,\n      acao: atualNorm === norm('RESPONSAVEL_PADRAO') ? 'IGNORAR' : 'ATUALIZAR',\n      motivo: 'NENHUM_PERMITIDO_NAS_MENSAGENS_E_ATUAL_PROIBIDO',\n      conversas_analisadas: conversasAnalisadas,\n      mensagens_analisadas: mensagensAnalisadas,\n      candidatos_permitidos_encontrados: 0,\n      candidatos_permitidos_recentes: 0\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    ...p,\n    consultor_final: atual,\n    consultor_historico_encontrado: null,\n    origem_consultor_historico: null,\n    historico_dentro_30_dias: false,\n    acao: 'IGNORAR',\n    motivo: conversasAnalisadas > 0\n      ? 'MENSAGENS_BUSCADAS_MAS_NENHUM_CONSULTOR_PERMITIDO_ENCONTRADO'\n      : 'SEM_CONVERSAS',\n    conversas_analisadas: conversasAnalisadas,\n    mensagens_analisadas: mensagensAnalisadas,\n    candidatos_permitidos_encontrados: 0,\n    candidatos_permitidos_recentes: 0\n  }\n}];",
+        "mode": "runOnceForAllItems"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3020,
+        -220
+      ],
+      "id": "dfc3e200-9581-4a0d-90a4-e027415ff7e4",
+      "name": "Selecionar Consultor",
+      "notes": "V13: mesma lógica da V12, mas ignora mensagens privadas/notas internas (private=true ou is_private=true) ao identificar consultores pelo histórico. Prioriza consultor permitido mais recente em até 30 dias; se não houver, usa o mais recente antigo.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT DISTINCT\n  CAST(`CNPJ` AS CHAR) AS `CNPJ`,\n  CAST(`TELEFONE` AS CHAR) AS `TELEFONE`,\n  CAST(COALESCE(`CONSULTOR`, '') AS CHAR) AS `CONSULTOR`\nFROM `clientes`\nWHERE `CNPJ` IS NOT NULL\n  AND TRIM(CAST(`CNPJ` AS CHAR)) <> ''\n  AND `TELEFONE` IS NOT NULL\n  AND TRIM(CAST(`TELEFONE` AS CHAR)) <> ''\n  AND REPLACE(REPLACE(REPLACE(REPLACE(TRIM(CAST(`CNPJ` AS CHAR)), '.', ''), '/', ''), '-', ''), ' ', '') IN (\n    'COLE_CNPJ_1_AQUI',\n    'COLE_CNPJ_2_AQUI'\n  )\nORDER BY `CNPJ`;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        -1560,
+        0
+      ],
+      "id": "4c321732-bb82-45e9-8fbe-af014cc04f3d",
+      "name": "MySQL — Buscar CNPJ e TELEFONE",
+      "notes": "ANTES DE EXECUTAR: substitua 'COLE_CNPJ_1_AQUI' e 'COLE_CNPJ_2_AQUI' pelos CNPJs que deseja processar, mantendo cada um entre aspas simples e separado por vírgula. Para incluir mais CNPJs, adicione novas linhas no bloco IN (...). A consulta compara CNPJs também quando houver pontuação (pontos, barra ou hífen). Não executa todos os registros: somente os CNPJs listados serão processados. Se esquecer os placeholders, nenhum registro será encontrado. Selecione a credencial MySQL ao importar.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE `clientes` SET `CONSULTOR` = $1 WHERE `CNPJ` = $2 AND `TELEFONE` = $3 AND TRIM(COALESCE(CAST(`CONSULTOR` AS CHAR), '')) = $4;",
+        "options": {
+          "queryBatching": "independently",
+          "queryReplacement": "={{ $json.consultor_final }}, {{ $json.CNPJ }}, {{ $json.TELEFONE_ORIGINAL }}, {{ $json.CONSULTOR_ATUAL }}"
+        }
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        3500,
+        -180
+      ],
+      "id": "9f6900ee-66b3-4d9c-a961-113fd028f82c",
+      "name": "MySQL — Atualizar CONSULTOR",
+      "notes": "Selecione a mesma credencial MySQL. Atualiza CONSULTOR nos registros correspondentes ao par CNPJ + TELEFONE dos CNPJs incluídos na lista do nó 'MySQL — Buscar CNPJ e TELEFONE'.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f1514c80-6333-41b4-a856-35e904859549",
+              "leftValue": "={{ $json.acao }}",
+              "rightValue": "ATUALIZAR",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3260,
+        0
+      ],
+      "id": "7d1f93d0-9975-4fdf-9f14-ee87805dd936",
+      "name": "Precisa atualizar CONSULTOR?",
+      "notes": "TRUE atualiza no MySQL. FALSE não altera o banco, mas agora também segue para a pausa e retorna ao loop para processar o próximo CNPJ.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "url": "={{ 'https://SEU_CHATWOOT.example.com/api/v1/accounts/SEU_ACCOUNT_ID/contacts/search?q=' + encodeURIComponent(String($('Preparar Busca Chatwoot').item.json.TELEFONE ?? '').trim()) }}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"Content-Type\": \"application/json\",\n  \"api_access_token\": \"SEU_API_TOKEN_AQUI\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        180
+      ],
+      "id": "7c9b640a-2367-4321-b3d4-2ceb3f0678a6",
+      "name": "Buscar Contato Chatwoot — telefone com DDI",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000,
+      "onError": "stopWorkflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5fabffda-32d6-40f1-b021-f79c4f21c35e",
+              "leftValue": "={{ Array.isArray($json.payload) ? $json.payload.length : (Array.isArray($json.data?.payload) ? $json.data.payload.length : 0) }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        500,
+        180
+      ],
+      "id": "ec5a7bd8-80cb-4429-8300-7330af60873e",
+      "name": "Contato Encontrado? — com DDI"
+    },
+    {
+      "parameters": {
+        "url": "={{ 'https://SEU_CHATWOOT.example.com/api/v1/accounts/SEU_ACCOUNT_ID/contacts/search?q=' + encodeURIComponent(String($('Preparar Busca Chatwoot').item.json.TELEFONE_ORIGINAL ?? '').trim()) }}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"Content-Type\": \"application/json\",\n  \"api_access_token\": \"SEU_API_TOKEN_AQUI\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        740,
+        300
+      ],
+      "id": "257dc2fe-8f68-44b3-a4fd-9a2942f846c8",
+      "name": "Buscar Contato Chatwoot — telefone original",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000,
+      "onError": "stopWorkflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bcff1e59-3b9c-4655-b284-be0397c89157",
+              "leftValue": "={{ Array.isArray($json.payload) ? $json.payload.length : (Array.isArray($json.data?.payload) ? $json.data.payload.length : 0) }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        980,
+        300
+      ],
+      "id": "2b8cf2e7-5ba0-4f34-8c2f-c20f0e01f8a6",
+      "name": "Contato Encontrado? — original"
+    },
+    {
+      "parameters": {
+        "url": "={{ 'https://SEU_CHATWOOT.example.com/api/v1/accounts/SEU_ACCOUNT_ID/contacts/search?q=' + encodeURIComponent(String($('Preparar Busca Chatwoot').item.json.TELEFONE_LOCAL_FORMATADO ?? '').trim()) }}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"Content-Type\": \"application/json\",\n  \"api_access_token\": \"SEU_API_TOKEN_AQUI\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1220,
+        420
+      ],
+      "id": "ac27c4fc-84c7-4e19-bac1-250c4ebfa9ae",
+      "name": "Buscar Contato Chatwoot — telefone formatado",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000,
+      "onError": "stopWorkflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2c8da5b3-ed12-4c90-9519-d95e85d34b1e",
+              "leftValue": "={{ Array.isArray($json.payload) ? $json.payload.length : (Array.isArray($json.data?.payload) ? $json.data.payload.length : 0) }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1460,
+        420
+      ],
+      "id": "f9ff0d2e-87ba-4b6c-9bd6-a06dd34f967c",
+      "name": "Contato Encontrado? — formatado"
+    },
+    {
+      "parameters": {
+        "url": "={{ 'https://SEU_CHATWOOT.example.com/api/v1/accounts/SEU_ACCOUNT_ID/contacts/search?q=' + encodeURIComponent(String($('Preparar Busca Chatwoot').item.json.TELEFONE_E164_FORMATADO ?? '').trim()) }}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"Content-Type\": \"application/json\",\n  \"api_access_token\": \"SEU_API_TOKEN_AQUI\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1700,
+        540
+      ],
+      "id": "bb2fb68b-b968-4f2b-aed1-5fcfaf665079",
+      "name": "Buscar Contato Chatwoot — internacional formatado",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000,
+      "onError": "stopWorkflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9e32552a-6878-4bb0-b63c-b64dbd0a8784",
+              "leftValue": "={{ Array.isArray($json.payload) ? $json.payload.length : (Array.isArray($json.data?.payload) ? $json.data.payload.length : 0) }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1940,
+        540
+      ],
+      "id": "632e7fc5-7019-4f86-b090-6d24e689bb0e",
+      "name": "Contato Encontrado? — internacional formatado"
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1250,
+        0
+      ],
+      "id": "46271d9c-7366-4ef4-b5dc-2fbeeb75ac9e",
+      "name": "LOOP — 1 CNPJ POR VEZ"
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 1,
+        "unit": "seconds"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3620,
+        120
+      ],
+      "id": "a473c590-cfa7-4bb7-ab74-976837701766",
+      "name": "PAUSA — 1 SEGUNDO"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -1000,
+        -260
+      ],
+      "id": "4ec8d8c3-d256-4850-a67e-c3e5452ec058",
+      "name": "FIM — TODOS PROCESSADOS"
+    },
+    {
+      "parameters": {
+        "content": "## 1. ENTRADA / CONTROLE\nBusca somente os CNPJs escolhidos no Banco de dados e envia **um CNPJ por vez** para o restante do fluxo.",
+        "height": 420,
+        "width": 900
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1880,
+        -180
+      ],
+      "id": "468db39b-8b30-46f1-8dd7-283f85f9feab",
+      "name": "NOTA — ENTRADA"
+    },
+    {
+      "parameters": {
+        "content": "## 2. PREPARAÇÃO\nNormaliza CNPJ/telefone e prepara os formatos usados nas buscas do Chatwoot.",
+        "height": 420,
+        "width": 700
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1000,
+        -180
+      ],
+      "id": "da004986-2699-4319-bef8-b44b301da609",
+      "name": "NOTA — PREPARAÇÃO"
+    },
+    {
+      "parameters": {
+        "content": "## 3. BUSCA NO CHATWOOT\nTenta localizar o contato em formatos alternativos. Ao encontrar, consulta o histórico de conversas.",
+        "height": 920,
+        "width": 2100
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        -430
+      ],
+      "id": "d1cf08ef-9013-408b-b9b7-523d454953c1",
+      "name": "NOTA — CHATWOOT"
+    },
+    {
+      "parameters": {
+        "content": "## 4. HISTÓRICO / DECISÃO\nBusca mensagens de cada conversa, encontra consultores permitidos no histórico, aplica prioridade de 30 dias e decide se atualiza o Banco de dados.",
+        "height": 900,
+        "width": 980
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2880,
+        -460
+      ],
+      "id": "9e42218d-4405-4b76-be85-6ddd11c76946",
+      "name": "NOTA — DECISÃO"
+    },
+    {
+      "parameters": {
+        "content": "## REGRAS V13\n- Consultor atual permitido: mantém.\n- Atual proibido / RESPONSÁVEL PADRÃO / inválido: procura permitido no histórico.\n- Mensagens privadas/notas internas são IGNORADAS.\n- Prioridade: permitido mais recente em até 30 dias.\n- Se não houver recente: permitido mais recente antigo.\n- Se não houver nenhum permitido e atual for proibido: RESPONSÁVEL PADRÃO.",
+        "height": 220,
+        "width": 520
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2600,
+        -460
+      ],
+      "id": "2b6a103b-bdd0-4fa6-8af2-963470e6852f",
+      "name": "REGRAS V13"
+    },
+    {
+      "parameters": {
+        "jsCode": "const origem = $json ?? {};\nconst p = $('Preparar Busca Chatwoot').item.json;\n\nconst conversas = Array.isArray(origem.payload)\n  ? origem.payload\n  : Array.isArray(origem.conversations)\n    ? origem.conversations\n    : [];\n\nif (conversas.length === 0) {\n  return [{\n    json: {\n      ...p,\n      sem_conversas: true,\n      conversation_id: null,\n      conversation_last_activity_at: null,\n      conversation_assignee_name: ''\n    }\n  }];\n}\n\nreturn conversas.map((c) => ({\n  json: {\n    ...p,\n    sem_conversas: false,\n    conversation_id: c?.id ?? null,\n    conversation_last_activity_at:\n      c?.last_activity_at ?? c?.timestamp ?? c?.updated_at ?? c?.created_at ?? null,\n    conversation_assignee_name:\n      c?.meta?.assignee?.name ??\n      c?.meta?.assignee?.available_name ??\n      c?.assignee?.name ??\n      ''\n  },\n  pairedItem: { item: 0 }\n}));",
+        "mode": "runOnceForAllItems"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2180,
+        -220
+      ],
+      "id": "761cf1ea-10ac-45a8-b640-6fc21953f0ea",
+      "name": "Preparar Conversas para Mensagens",
+      "notes": "Transforma cada conversa do contato em um item separado. Se não houver conversa, gera um item sentinela para a decisão continuar.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ff5396a5-fcc6-4ec3-a39e-ca7077e98f94",
+              "leftValue": "={{ $json.sem_conversas }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2400,
+        -220
+      ],
+      "id": "4f0f8e1f-27ca-4b03-bcd8-8f8fa9230215",
+      "name": "Tem Conversa para Buscar Mensagens?"
+    },
+    {
+      "parameters": {
+        "url": "={{ 'https://SEU_CHATWOOT.example.com/api/v1/accounts/SEU_ACCOUNT_ID/conversations/' + String($json.conversation_id ?? '') + '/messages?after=0' }}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"Content-Type\": \"application/json\",\n  \"api_access_token\": \"SEU_API_TOKEN_AQUI\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2620,
+        -280
+      ],
+      "id": "fa267135-bf2a-419b-9c42-08e6b80ca17a",
+      "name": "Buscar Mensagens da Conversa",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000,
+      "onError": "stopWorkflow",
+      "notes": "Busca as mensagens da conversa atual. Usa after=0 para retornar até 100 mensagens em ordem crescente.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const contexto = $('Preparar Conversas para Mensagens').item.json;\nreturn {\n  json: {\n    ...contexto,\n    resposta_mensagens: $json\n  }\n};",
+        "mode": "runOnceForEachItem"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2820,
+        -280
+      ],
+      "id": "e3bf34c6-0e6d-4f16-a74f-e5317800bf8d",
+      "name": "Juntar Conversa + Mensagens",
+      "notes": "Reanexa CNPJ, telefone, consultor atual e ID da conversa ao retorno das mensagens.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "content": "## VERSÃO PÚBLICA / PORTFÓLIO\nEste workflow é uma cópia sanitizada da V13. URLs, tokens, IDs de conta, credenciais, nomes de colaboradores e detalhes internos foram removidos ou substituídos por placeholders.\n\nAntes de executar: configure suas próprias credenciais e substitua os placeholders.",
+        "height": 260,
+        "width": 620
+      },
+      "id": "4a078867-7fcb-4763-91ad-aef6d26c3bde",
+      "name": "NOTA — VERSÃO PÚBLICA",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1100,
+        -700
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "MySQL — Buscar CNPJ e TELEFONE": {
+      "main": [
+        [
+          {
+            "node": "LOOP — 1 CNPJ POR VEZ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar CNPJ e Telefone": {
+      "main": [
+        [
+          {
+            "node": "Preparar Busca Chatwoot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Busca Chatwoot": {
+      "main": [
+        [
+          {
+            "node": "Buscar Contato Chatwoot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Contato Chatwoot": {
+      "main": [
+        [
+          {
+            "node": "Contato Encontrado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contato Encontrado?": {
+      "main": [
+        [
+          {
+            "node": "Buscar Conversas Chatwoot",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Buscar Contato Chatwoot — telefone com DDI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Conversas Chatwoot": {
+      "main": [
+        [
+          {
+            "node": "Preparar Conversas para Mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Selecionar Consultor": {
+      "main": [
+        [
+          {
+            "node": "Precisa atualizar CONSULTOR?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sem contato — preservar ou corrigir CONSULTOR": {
+      "main": [
+        [
+          {
+            "node": "Precisa atualizar CONSULTOR?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Precisa atualizar CONSULTOR?": {
+      "main": [
+        [
+          {
+            "node": "MySQL — Atualizar CONSULTOR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PAUSA — 1 SEGUNDO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Contato Chatwoot — telefone com DDI": {
+      "main": [
+        [
+          {
+            "node": "Contato Encontrado? — com DDI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contato Encontrado? — com DDI": {
+      "main": [
+        [
+          {
+            "node": "Buscar Conversas Chatwoot",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Buscar Contato Chatwoot — telefone original",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Contato Chatwoot — telefone original": {
+      "main": [
+        [
+          {
+            "node": "Contato Encontrado? — original",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contato Encontrado? — original": {
+      "main": [
+        [
+          {
+            "node": "Buscar Conversas Chatwoot",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Buscar Contato Chatwoot — telefone formatado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Contato Chatwoot — telefone formatado": {
+      "main": [
+        [
+          {
+            "node": "Contato Encontrado? — formatado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contato Encontrado? — formatado": {
+      "main": [
+        [
+          {
+            "node": "Buscar Conversas Chatwoot",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Buscar Contato Chatwoot — internacional formatado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Contato Chatwoot — internacional formatado": {
+      "main": [
+        [
+          {
+            "node": "Contato Encontrado? — internacional formatado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contato Encontrado? — internacional formatado": {
+      "main": [
+        [
+          {
+            "node": "Buscar Conversas Chatwoot",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sem contato — preservar ou corrigir CONSULTOR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "INICIAR PROCESSAMENTO": {
+      "main": [
+        [
+          {
+            "node": "MySQL — Buscar CNPJ e TELEFONE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LOOP — 1 CNPJ POR VEZ": {
+      "main": [
+        [
+          {
+            "node": "FIM — TODOS PROCESSADOS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Normalizar CNPJ e Telefone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL — Atualizar CONSULTOR": {
+      "main": [
+        [
+          {
+            "node": "PAUSA — 1 SEGUNDO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PAUSA — 1 SEGUNDO": {
+      "main": [
+        [
+          {
+            "node": "LOOP — 1 CNPJ POR VEZ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FIM — TODOS PROCESSADOS": {
+      "main": [
+        []
+      ]
+    },
+    "Preparar Conversas para Mensagens": {
+      "main": [
+        [
+          {
+            "node": "Tem Conversa para Buscar Mensagens?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tem Conversa para Buscar Mensagens?": {
+      "main": [
+        [
+          {
+            "node": "Buscar Mensagens da Conversa",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Selecionar Consultor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Mensagens da Conversa": {
+      "main": [
+        [
+          {
+            "node": "Juntar Conversa + Mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntar Conversa + Mensagens": {
+      "main": [
+        [
+          {
+            "node": "Selecionar Consultor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

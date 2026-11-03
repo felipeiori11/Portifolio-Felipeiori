@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Felipe Iori de Souza | Desenvolvedor de software</title>
+  <meta name="description" content="Portfólio de Felipe Iori de Souza, desenvolvedor de software e estudante de Engenharia de Software.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#f5f5f5">
+  <script src="theme.js"></script>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <header class="top-navigation floating-dock" id="menu-principal" aria-label="Navegação principal">
+    <div class="dock-rail">
+      <a class="dock-item dock-profile" href="#inicio" aria-label="Felipe Iori — Início"><span class="dock-bubble dock-avatar"><img src="assets/foto-felipe.jpeg" alt="" width="40" height="40"></span><span class="dock-item-label"><strong>Felipe Iori</strong><small>Desenvolvedor de software</small></span></a>
+      <div class="dock-divider" role="separator"></div>
+      <nav class="abas dock-group" aria-label="Seções do portfólio">
+        <a href="#inicio" class="dock-item" aria-label="Início"><span class="dock-bubble"><span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg></span></span><span class="dock-item-label">Início</span></a>
+        <a href="#sobre" class="dock-item" aria-label="Sobre mim"><span class="dock-bubble"><span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21v-2a8 8 0 0 1 16 0v2"></path></svg></span></span><span class="dock-item-label">Sobre mim</span></a>
+        <a href="#projetos" class="dock-item" aria-label="Projetos"><span class="dock-bubble"><span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg></span></span><span class="dock-item-label">Projetos</span></a>
+        <a href="#experiencia" class="dock-item" aria-label="Experiência"><span class="dock-bubble"><span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="14" rx="2"></rect><path d="M8 7V3h8v4M3 12a23 23 0 0 0 18 0M12 11v4"></path></svg></span></span><span class="dock-item-label">Experiência</span></a>
+        <a href="#formacao" class="dock-item" aria-label="Formação"><span class="dock-bubble"><span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2 9 10-5 10 5-10 5zM6 11v6c4 3 8 3 12 0v-6M22 9v8"></path></svg></span></span><span class="dock-item-label">Formação</span></a>
+        <a href="#skills" class="dock-item" aria-label="Habilidades"><span class="dock-bubble"><span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-15-2 18"></path></svg></span></span><span class="dock-item-label">Habilidades</span></a>
+        <a href="#contatos" class="dock-item" aria-label="Contato"><span class="dock-bubble"><span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 6 9 7 9-7"></path></svg></span></span><span class="dock-item-label">Contato</span></a>
+      </nav>
+      <div class="dock-divider" role="separator"></div>
+      <nav class="social-links dock-group" aria-label="Redes e contato">
+        <a href="https://github.com/felipeiori11" target="_blank" rel="noopener noreferrer" class="dock-item" aria-label="GitHub"><span class="dock-bubble"><span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4 1-4-2-6-2m12 5v-4a3 3 0 0 0-.8-2.2c3-.3 6-1.5 6-6.2a5 5 0 0 0-1.4-3.5 5 5 0 0 0-.1-3.5s-1.1-.4-3.6 1.3a13 13 0 0 0-6.5 0C6.1 2.2 5 2.6 5 2.6a5 5 0 0 0-.1 3.5 5 5 0 0 0-1.4 3.5c0 4.7 3 5.9 6 6.2A3 3 0 0 0 9 18v4"></path></svg></span></span><span class="dock-item-label">GitHub</span></a>
+        <a href="https://www.linkedin.com/in/felipe-iori" target="_blank" rel="noopener noreferrer" class="dock-item" aria-label="LinkedIn"><span class="dock-bubble"><span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M7 10v7m0-10v.01M11 17v-7m0 3c0-4 6-4 6 0v4"></path></svg></span></span><span class="dock-item-label">LinkedIn</span></a>
+        <a href="mailto:felipeiori7@gmail.com" class="dock-item" aria-label="E-mail"><span class="dock-bubble"><span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 6 9 7 9-7"></path></svg></span></span><span class="dock-item-label">E-mail</span></a>
+      </nav>
+      <div class="dock-divider" role="separator"></div>
+      <a class="dock-item" href="assets/curriculo.pdf" data-curriculo-modal="" aria-label="Meu currículo"><span class="dock-bubble"><span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></span><span class="dock-item-label">Meu currículo</span></a>
+    </div>
+    <div class="theme-switch" role="group" aria-label="Tema do site" hidden>
+      <button type="button" class="theme-option" data-theme-option="light" aria-pressed="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+        <span>Claro</span>
+      </button>
+      <button type="button" class="theme-option" data-theme-option="dark" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 13A9 9 0 0 1 11 3.2 9 9 0 1 0 20.8 13Z"/></svg>
+        <span>Escuro</span>
+      </button>
+    </div>
+  </header>
+<div class="page-shell"><div class="page-surface"><main class="container" id="conteudo">
+<section id="inicio" class="aba ativa" aria-labelledby="inicio-titulo">
+    <div class="home-intro"><span class="page-emoji" aria-hidden="true">👋</span>
+    <h1 id="inicio-titulo" tabindex="-1">Olá, eu sou o Felipe</h1>
+    <p>Sou desenvolvedor de software e gosto de <span class="highlight">construir soluções</span> que conectam pessoas, dados e processos.</p>
+    <p>Formado em Análise e Desenvolvimento de Sistemas pelo SENAI, estudo <span class="highlight">Engenharia de Software</span> na Universidade Positivo e atuo como estagiário em Automação e Dados na Aliest.</p></div>
+    <div class="section-heading"><h2>No que estou trabalhando</h2><a class="text-link" href="#projetos">Todos os projetos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a></div>
+    <div class="featured-projects project-cards-grid">
+      <div class="project-card-scene" data-card-3d>
+        <article class="project-card-3d">
+          <h3 class="project-card-title card-layer">Portal do Colaborador</h3>
+          <p class="project-card-description card-layer">Conteúdos, capacitação e onboarding em um só lugar para os colaboradores da Aliest.</p>
+          <div class="project-card-image card-layer"><img src="assets/portal-home.jpeg" alt="Página inicial do Portal do Colaborador" width="1000" height="600" loading="lazy"></div>
+          <div class="project-card-tags card-layer"><span>React</span><span>Plataforma interna</span></div>
+          <div class="project-card-footer card-layer">
+            <span class="project-card-category">Projeto em destaque</span>
+            <a class="project-card-action project-card-action-primary" href="#portal-modal" data-portal-modal="">Ver projeto →</a>
+          </div>
+        </article>
+      </div>
+      <div class="project-card-scene" data-card-3d>
+        <article class="project-card-3d">
+          <h3 class="project-card-title card-layer">CRM Aliest</h3>
+          <p class="project-card-description card-layer">Uma operação de relacionamento mais organizada, com Kanban, mensagens e integração ao Chatwoot.</p>
+          <div class="project-card-image card-layer"><img src="assets/crm-kanban.jpeg" alt="Kanban do CRM Aliest" width="1000" height="600" loading="lazy"></div>
+          <div class="project-card-tags card-layer"><span>CRM</span><span>Chatwoot</span><span>Integrações</span></div>
+          <div class="project-card-footer card-layer">
+            <span class="project-card-category">Projeto em destaque</span>
+            <a class="project-card-action project-card-action-primary" href="#crm-modal" data-crm-modal="">Ver projeto →</a>
+          </div>
+        </article>
+      </div>
+      <div class="project-card-scene" data-card-3d>
+        <article class="project-card-3d">
+          <h3 class="project-card-title card-layer">Automação de atendimentos</h3>
+          <p class="project-card-description card-layer">Um workflow que conecta dados e APIs para distribuir atendimentos com regras de negócio.</p>
+          <div class="project-card-image card-layer"><img src="assets/miniatura-automacao.jpeg" alt="Workflow de distribuição de atendimentos no n8n" width="1000" height="600" loading="lazy"></div>
+          <div class="project-card-tags card-layer"><span>n8n</span><span>JavaScript</span><span>REST API</span></div>
+          <div class="project-card-footer card-layer">
+            <span class="project-card-category">Projeto em destaque</span>
+            <a class="project-card-action project-card-action-primary" href="#projeto-automacao" data-projeto-modal="">Ver projeto →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div class="section-heading"><h2>Tecnologias e ferramentas</h2><a class="text-link" href="#skills">Ver habilidades <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a></div>
+    <div class="tech-stack" aria-label="Tecnologias utilizadas"><div class="tech-item"><span class="tech-mark" data-tech="Py">Py</span><span>Python</span></div><div class="tech-item"><span class="tech-mark" data-tech="JS">JS</span><span>JavaScript</span></div><div class="tech-item"><span class="tech-mark" data-tech="SQL">SQL</span><span>SQL</span></div><div class="tech-item"><span class="tech-mark" data-tech="C">C</span><span>C</span></div><div class="tech-item"><span class="tech-mark" data-tech="git">git</span><span>Git e GitHub</span></div><div class="tech-item"><span class="tech-mark" data-tech="n8n">n8n</span><span>n8n</span></div></div>
+    <div class="home-contact"><p>Vamos conversar sobre tecnologia?</p><a class="text-link" href="#contatos">Entre em contato <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a></div>
+  </section>
+
+    <!-- SOBRE -->
+    <section id="sobre" class="aba">
+      <span class="page-emoji" aria-hidden="true">✦</span><h1 tabindex="-1">Um pouco sobre mim</h1>
+
+      <div class="about-gallery"><img src="assets/foto-felipe.jpeg" alt="Felipe Iori de Souza" width="200" height="260"><img src="assets/portal-home.jpeg" alt="Projeto Portal do Colaborador" width="200" height="260"><img src="assets/miniatura-automacao.jpeg" alt="Projeto de automação n8n" width="200" height="260"><img src="assets/crm-kanban.jpeg" alt="Projeto CRM Aliest" width="200" height="260"></div><div class="sobre"><div class="texto">
+          <p>
+            Sou desenvolvedor de software, formado em Análise e Desenvolvimento de Sistemas
+            pelo SENAI e atualmente estudante de Engenharia de Software na Universidade Positivo.
+          </p>
+          <p>
+            Moro em Curitiba, Paraná, e estou construindo minha trajetória profissional em
+            tecnologia, com foco em desenvolvimento de software e evolução contínua.
+          </p>
+          <a class="botao" href="assets/curriculo.pdf" data-curriculo-modal>Meu currículo</a>
+        </div>
+      </div>
+
+
+
+    </section>
+
+    <!-- FORMAÇÃO -->
+    <section id="formacao" class="aba">
+      <h1 tabindex="-1">Formação</h1>
+      <div class="formacao-lista">
+        <article class="formacao-item">
+          <div class="formacao-meta">
+            <div class="formacao-periodo">2026 – 2029</div>
+            <div class="formacao-tipo">Ensino superior</div>
+          </div>
+          <div class="formacao-conteudo">
+            <h2>Engenharia de Software</h2>
+            <p>Universidade Positivo</p>
+          </div>
+          <span class="formacao-status formacao-status--cursando">Cursando</span>
+        </article>
+
+        <article class="formacao-item">
+          <div class="formacao-meta">
+            <div class="formacao-periodo">2024 – 2025</div>
+            <div class="formacao-tipo">Ensino técnico</div>
+          </div>
+          <div class="formacao-conteudo">
+            <h2>Análise e Desenvolvimento de Sistemas</h2>
+            <p>SENAI</p>
+          </div>
+          <span class="formacao-status formacao-status--concluido">Concluído</span>
+        </article>
+
+        <article id="wizard" class="formacao-item">
+          <div class="formacao-meta">
+            <div class="formacao-periodo">Jan 2026 – atual</div>
+            <div class="formacao-tipo">Idioma</div>
+          </div>
+          <div class="formacao-conteudo">
+            <h2>Curso de Inglês</h2>
+            <p>Wizard · Nível B1</p>
+          </div>
+          <span class="formacao-status formacao-status--cursando">Cursando</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- EXPERIÊNCIA -->
+    <section id="experiencia" class="aba">
+      <div class="experiencia-cabecalho">
+        <h1 tabindex="-1">Experiência</h1>
+      </div>
+
+      <div class="linha-do-tempo">
+        <article class="experiencia-card">
+          <div class="experiencia-logo" aria-label="Logo da Aliest">ALIEST</div>
+
+          <div class="experiencia-conteudo">
+            <h2>Estagiário em Automação e Dados</h2>
+            <p class="experiencia-empresa">Aliest · Estágio</p>
+            <p class="experiencia-periodo">out. de 2026 – atual</p>
+            <p class="experiencia-local">Curitiba, Paraná, Brasil · No local</p>
+            <p class="experiencia-acao">
+              <a class="botao" href="#skills">Ver habilidades</a>
+            </p>
+          </div>
+
+          <span class="experiencia-status">O momento</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- HABILIDADES -->
+    <section id="skills" class="aba">
+      <h1 tabindex="-1">Habilidades</h1>
+
+      <div class="grupo">
+        <h2>Linguagens de programação</h2>
+        <ul class="linhas">
+          <li>
+            <span class="titulo">Python</span>
+            <span class="habilidade-origens"><a class="habilidade-link habilidade-link--aliest" href="#experiencia" data-modal="aliest" aria-haspopup="dialog">Aliest</a><a class="habilidade-link habilidade-link--positivo" href="#formacao" data-modal="positivo" aria-haspopup="dialog">Universidade Positivo</a></span>
+            <span class="detalhe habilidade-funcao">Programação</span>
+          </li>
+          <li>
+            <span class="titulo">JavaScript</span>
+            <span class="habilidade-origens"><a class="habilidade-link habilidade-link--aliest" href="#experiencia" data-modal="aliest" aria-haspopup="dialog">Aliest</a><a class="habilidade-link habilidade-link--positivo" href="#formacao" data-modal="positivo" aria-haspopup="dialog">Universidade Positivo</a></span>
+            <span class="detalhe habilidade-funcao">Programação</span>
+          </li>
+          <li>
+            <span class="titulo">SQL</span>
+            <span class="habilidade-origens"><a class="habilidade-link habilidade-link--aliest" href="#experiencia" data-modal="aliest" aria-haspopup="dialog">Aliest</a><a class="habilidade-link habilidade-link--positivo" href="#formacao" data-modal="positivo" aria-haspopup="dialog">Universidade Positivo</a></span>
+            <span class="detalhe habilidade-funcao">Linguagem de consulta</span>
+          </li>
+          <li>
+            <span class="titulo">C</span>
+            <span class="habilidade-origens"><a class="habilidade-link habilidade-link--aliest" href="#experiencia" data-modal="aliest" aria-haspopup="dialog">Aliest</a><a class="habilidade-link habilidade-link--positivo" href="#formacao" data-modal="positivo" aria-haspopup="dialog">Universidade Positivo</a></span>
+            <span class="detalhe habilidade-funcao">Programação</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="grupo">
+        <h2>Ferramentas</h2>
+        <ul class="linhas">
+          <li>
+            <span class="titulo">Git e GitHub</span>
+            <span class="habilidade-origens"><a class="habilidade-link habilidade-link--aliest" href="#experiencia" data-modal="aliest" aria-haspopup="dialog">Aliest</a><a class="habilidade-link habilidade-link--positivo" href="#formacao" data-modal="positivo" aria-haspopup="dialog">Universidade Positivo</a></span>
+            <span class="detalhe habilidade-funcao">Controle de versão</span>
+          </li>
+          <li>
+            <span class="titulo">MySQL e MongoDB</span>
+            <span class="habilidade-origens"><a class="habilidade-link habilidade-link--aliest" href="#experiencia" data-modal="aliest" aria-haspopup="dialog">Aliest</a><a class="habilidade-link habilidade-link--positivo" href="#formacao" data-modal="positivo" aria-haspopup="dialog">Universidade Positivo</a></span>
+            <span class="detalhe habilidade-funcao">Bancos de dados</span>
+          </li>
+          <li><span class="titulo">n8n</span><span class="habilidade-origens"><a class="habilidade-link habilidade-link--aliest" href="#experiencia" data-modal="aliest" aria-haspopup="dialog">Aliest</a></span><span class="detalhe habilidade-funcao">Automação</span></li>
+          <li><span class="titulo">Railway</span><span class="habilidade-origens"><a class="habilidade-link habilidade-link--aliest" href="#experiencia" data-modal="aliest" aria-haspopup="dialog">Aliest</a></span><span class="detalhe habilidade-funcao">Hospedagem e deploy</span></li>
+          <li><span class="titulo">Ferramentas Microsoft</span><span class="habilidade-origens"><a class="habilidade-link habilidade-link--aliest" href="#experiencia" data-modal="aliest" aria-haspopup="dialog">Aliest</a></span><span class="detalhe habilidade-funcao">Excel e Power BI</span></li>
+        </ul>
+      </div>
+
+      <div class="grupo">
+        <h2>Idiomas</h2>
+        <ul class="linhas">
+          <li class="habilidade-ingles">
+            <span class="titulo">Inglês</span>
+            <span class="habilidade-origens habilidade-origens-wizard"><a class="habilidade-link habilidade-link--wizard" href="#wizard" data-modal="wizard" aria-haspopup="dialog">Wizard</a></span>
+            <span class="detalhe habilidade-funcao">Nível B1</span>
+          </li>
+          <li><span class="titulo">Espanhol</span><span class="habilidade-origens" aria-hidden="true"></span><span class="detalhe habilidade-funcao">Básico</span></li>
+          <li><span class="titulo">Português</span><span class="habilidade-origens" aria-hidden="true"></span><span class="detalhe habilidade-funcao">Fluente</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PROJETOS -->
+    <section id="projetos" class="aba">
+      <div class="projetos-cabecalho">
+        <h1 tabindex="-1">Projetos</h1>
+        <div class="projetos-miniabas" role="tablist" aria-label="Categorias de projetos">
+          <button class="projetos-miniaba ativa" type="button" role="tab" aria-selected="true" data-projetos-visao="projetos">Projetos</button>
+          <button class="projetos-miniaba" type="button" role="tab" aria-selected="false" data-projetos-visao="automacoes">Automações</button>
+        </div>
+      </div>
+
+      <div class="projetos-visao ativa" id="projetos-tradicionais" data-projetos-conteudo="projetos">
+        <div class="projetos-grid project-cards-grid">
+        <div class="project-card-scene" data-card-3d>
+        <article class="project-card-3d">
+          <h2 class="project-card-title card-layer">Portal do colaborador - Aliest</h2>
+          <p class="project-card-description card-layer">Plataforma interna para centralizar conteúdos, informações e recursos destinados aos colaboradores.</p>
+          <div class="project-card-image card-layer"><img src="assets/portal-home.jpeg" alt="HOME PAGE do Portal do Colaborador com os destaques do mês" width="1000" height="600" loading="lazy"></div>
+          
+          <div class="project-card-footer card-layer">
+            <span class="project-card-category">Projeto Aliest</span>
+            <a class="project-card-action project-card-action-primary" href="#portal-modal" data-portal-modal="">Ver projeto</a>
+          </div>
+        </article>
+      </div>
+
+        <div class="project-card-scene" data-card-3d>
+        <article class="project-card-3d">
+          <h2 class="project-card-title card-layer">CRM Aliest</h2>
+          <p class="project-card-description card-layer">Plataforma interna para centralizar a operação de relacionamento com clientes, atendimentos e indicadores.</p>
+          <div class="project-card-image card-layer"><img src="assets/crm-kanban.jpeg" alt="Kanban de relacionamento do CRM Aliest" width="1000" height="600" loading="lazy"></div>
+          
+          <div class="project-card-footer card-layer">
+            <span class="project-card-category">Projeto Aliest</span>
+            <a class="project-card-action project-card-action-primary" href="#crm-modal" data-crm-modal="">Ver projeto</a>
+          </div>
+        </article>
+      </div>
+
+        <div class="project-card-scene" data-card-3d>
+        <article class="project-card-3d">
+          <h2 class="project-card-title card-layer">Repositório de aulas - GitHub</h2>
+          <p class="project-card-description card-layer">Repositório com materiais e conteúdos desenvolvidos durante os estudos.</p>
+          <div class="project-card-image card-layer"><img src="assets/miniatura-repositorios.png" alt="Ilustração dos repositórios de aulas com C, HTML, CSS, JavaScript e MySQL" width="1000" height="600" loading="lazy"></div>
+          
+          <div class="project-card-footer card-layer">
+            <span class="project-card-category">Projeto acadêmico</span>
+            <a class="project-card-action project-card-action-primary" href="#aulas-modal" data-aulas-modal="">Ver repositórios</a>
+          </div>
+        </article>
+      </div>
+        </div>
+      </div>
+
+      <div class="projetos-visao" id="automacoes-projetos" data-projetos-conteudo="automacoes" hidden>
+        <div class="automacoes-secao">
+          <div class="automacoes-titulo-linha">
+            <h2 class="automacoes-titulo">Automações &amp; Integrações</h2>
+          </div>
+          <div class="project-card-scene" data-card-3d>
+        <article class="project-card-3d">
+          <h3 class="project-card-title card-layer">Automação de Distribuição de Atendimentos</h3>
+          <p class="project-card-description card-layer">Workflow desenvolvido em n8n para integrar dados, consultar conversas via API e realizar distribuições automáticas com base em regras de negócio.</p>
+          <div class="project-card-image card-layer"><img src="assets/miniatura-automacao.jpeg" alt="Fluxo de automação de distribuição de atendimentos no n8n" width="1000" height="600" loading="lazy"></div>
+          <div class="project-card-tags card-layer">
+              <span>n8n</span>
+              <span>REST API</span>
+              <span>Chatwoot</span>
+              <span>JavaScript</span>
+              <span>Google Sheets</span>
+            </div>
+          <div class="project-card-footer card-layer">
+            
+            <a class="project-card-action project-card-action-secondary" href="assets/Automacao_n8n_V13_PUBLICA_PORTFOLIO.json" download="">Baixar workflow</a><a class="project-card-action project-card-action-primary" href="#projeto-automacao" data-projeto-modal="">Ver projeto</a>
+          </div>
+        </article>
+      </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATOS -->
+    <section id="contatos" class="aba">
+      <h1 tabindex="-1">Contatos</h1>
+      <p class="intro">Vamos conversar? Entre em contato para conversas profissionais, projetos e oportunidades.</p>
+
+      <dl class="contatos">
+        <dt>Localização</dt>
+        <dd>Curitiba, Paraná, Brasil</dd>
+
+        <dt>E-mail</dt>
+        <dd><a href="mailto:felipeiori7@gmail.com">felipeiori7@gmail.com</a></dd>
+
+        <dt>Telefone</dt>
+        <dd><a href="tel:+5541995682817">(41) 99568-2817</a></dd>
+
+        <dt>LinkedIn</dt>
+        <dd><a href="https://www.linkedin.com/in/felipe-iori" target="_blank" rel="noopener">linkedin.com/in/felipe-iori</a></dd>
+<dt>GitHub</dt><dd><a href="https://github.com/felipeiori11" target="_blank" rel="noopener noreferrer">github.com/felipeiori11</a></dd>
+      </dl>
+    </section>
+
+  </main><footer class="rodape"><span>© 2026 Felipe Iori de Souza</span><a href="mailto:felipeiori7@gmail.com">Vamos conversar ↗</a></footer></div></div>
+
+  <dialog class="habilidade-modal" id="habilidade-modal" aria-labelledby="habilidade-modal-titulo">
+    <div class="habilidade-modal-cabecalho">
+      <div>
+        <p class="habilidade-modal-kicker">Origem da habilidade</p>
+        <h2 id="habilidade-modal-titulo">Informações</h2>
+      </div>
+      <button class="habilidade-modal-fechar" type="button" aria-label="Fechar janela">×</button>
+    </div>
+    <p class="habilidade-modal-descricao" id="habilidade-modal-descricao"></p>
+  </dialog>
+
+  <dialog class="curriculo-modal" id="curriculo-modal" aria-labelledby="curriculo-modal-titulo">
+    <div class="curriculo-modal-cabecalho">
+      <h2 id="curriculo-modal-titulo">Meu currículo</h2>
+      <div class="curriculo-modal-acoes">
+        <a class="botao curriculo-modal-download" href="assets/curriculo.pdf" download>Baixar currículo em PDF</a>
+        <button class="habilidade-modal-fechar curriculo-modal-fechar" type="button" aria-label="Fechar currículo">×</button>
+      </div>
+    </div>
+    <iframe class="curriculo-modal-pdf" src="assets/curriculo-recortado.pdf#toolbar=0&navpanes=0&pagemode=none&view=FitH" title="Currículo completo de Felipe Iori de Souza"></iframe>
+  </dialog>
+
+  <dialog class="projeto-modal" id="projeto-automacao" aria-labelledby="projeto-automacao-titulo">
+    <div class="projeto-modal-cabecalho">
+      <div>
+        <p class="projeto-kicker">Automação e integração</p>
+        <h2 id="projeto-automacao-titulo">Automação de Distribuição de Atendimentos</h2>
+      </div>
+      <div class="projeto-modal-acoes">
+        <a class="botao projeto-workflow" href="assets/Automacao_n8n_V13_PUBLICA_PORTFOLIO.json" download>Baixar workflow</a>
+        <button class="habilidade-modal-fechar projeto-modal-fechar" type="button" aria-label="Fechar projeto">×</button>
+      </div>
+    </div>
+
+    <div class="projeto-modal-conteudo">
+      <p>
+        Workflow desenvolvido em n8n para integrar dados de clientes com uma plataforma de atendimento,
+        automatizando etapas de identificação, distribuição e continuidade do atendimento.
+      </p>
+
+      <h3>O problema</h3>
+      <p>
+        O processo dependia de verificações manuais para identificar o responsável por cada cliente,
+        conferir conversas ativas e realizar a distribuição correta dentro da plataforma.
+        Com maior volume de registros, isso tornava o atendimento mais lento e sujeito a inconsistências.
+      </p>
+
+      <h3>A solução</h3>
+      <p>
+        Foi criado um workflow no n8n que recebe os dados do cliente, consulta a API da plataforma de
+        atendimento, localiza o contato, verifica suas conversas e aplica automaticamente as regras necessárias.
+      </p>
+
+      <h3>Como funciona</h3>
+      <ol>
+        <li>Recebe identificador da empresa, telefone e responsável pelo atendimento.</li>
+        <li>Consulta o contato correspondente por meio da API.</li>
+        <li>Consulta o histórico de conversas.</li>
+        <li>Verifica se existe uma conversa que permite a continuidade do atendimento.</li>
+        <li>Aplica o caminho adequado conforme o estado encontrado.</li>
+        <li>Identifica o responsável e direciona o atendimento automaticamente.</li>
+      </ol>
+
+      <h3>Fluxo e lógica condicional</h3>
+      <p>
+        Dados do cliente → n8n → busca do contato pela API → consulta das conversas → verificação do estado
+        → aplicação das regras de negócio → identificação do responsável → atualização do atendimento.
+      </p>
+      <p>
+        Quando existe uma conversa ativa, o workflow continua o atendimento e executa as ações adicionais
+        necessárias. Caso contrário, mantém o fluxo padrão definido para o cliente.
+      </p>
+
+      <h3>Tecnologias utilizadas</h3>
+      <div class="projeto-modal-tags">
+        <span>n8n</span>
+        <span>REST API</span>
+        <span>Chatwoot</span>
+        <span>Google Sheets</span>
+        <span>JavaScript</span>
+        <span>JSON</span>
+        <span>HTTP Requests</span>
+      </div>
+
+      <h3>Desafios técnicos</h3>
+      <p>
+        Foi necessário tratar situações com múltiplas conversas associadas ao mesmo contato, selecionar a conversa
+        mais relevante e lidar com diferentes formatos de resposta da API, mantendo o workflow funcionando mesmo
+        quando algumas informações não estavam disponíveis.
+      </p>
+
+      <h3>Resultado</h3>
+      <p>
+        A solução reduziu verificações manuais e tornou o processo mais padronizado, permitindo localizar o cliente,
+        consultar conversas, interpretar o estado do atendimento, aplicar regras e executar as ações correspondentes.
+      </p>
+
+      <h3>Privacidade</h3>
+      <p>
+        Esta é uma representação pública do projeto. Dados de clientes, identificadores internos, URLs privadas,
+        credenciais, nomes de responsáveis e regras internas específicas foram removidos ou generalizados.
+      </p>
+    </div>
+  </dialog>
+
+  <dialog class="aulas-modal portal-modal" id="portal-modal" aria-labelledby="portal-modal-titulo">
+    <div class="aulas-modal-cabecalho">
+      <div>
+        <p class="projeto-kicker">Projeto Aliest</p>
+        <h2 id="portal-modal-titulo">Portal do Colaborador</h2>
+      </div>
+      <button class="habilidade-modal-fechar portal-modal-fechar" type="button" aria-label="Fechar projeto">×</button>
+    </div>
+
+    <p class="portal-resumo">
+      Plataforma interna desenvolvida em <strong>React</strong> para centralizar conteúdos, informações e recursos,
+      incluindo módulos de capacitação e onboarding. O ambiente de produção é restrito a usuários autorizados.
+    </p>
+
+    <div class="aulas-controles">
+      <button class="aulas-controle" type="button" id="portal-anterior" aria-label="Imagem anterior">‹</button>
+      <div class="aulas-indicadores" id="portal-indicadores" aria-label="Selecionar imagem do portal">
+        <button class="aula-indicador ativo" type="button" data-portal-slide="0" aria-label="Ver tela de login" aria-current="true"></button>
+        <button class="aula-indicador" type="button" data-portal-slide="1" aria-label="Ver perfil do colaborador"></button>
+        <button class="aula-indicador" type="button" data-portal-slide="2" aria-label="Ver preferências da conta"></button>
+      </div>
+      <button class="aulas-controle" type="button" id="portal-proxima" aria-label="Próxima imagem">›</button>
+    </div>
+
+    <div class="aulas-carrossel" id="portal-carrossel">
+      <div class="aulas-track" id="portal-track">
+        <article class="aula-slide">
+          <img src="assets/portal-login.jpeg" alt="Tela de login do Portal do Colaborador">
+          <div class="aula-slide-conteudo">
+            <p class="aula-slide-kicker">Imagem 1 de 3</p>
+            <h3>Tela de login</h3>
+            <p>Entrada no portal com e-mail corporativo, senha, recuperação de acesso, lembrete de sessão e autenticação por biometria.</p>
+            <div class="aula-tags"><span>Login</span><span>Segurança</span><span>Biometria</span></div>
+          </div>
+        </article>
+
+        <article class="aula-slide">
+          <img src="assets/portal-perfil.png" alt="Tela de perfil do colaborador no Portal do Colaborador">
+          <div class="aula-slide-conteudo">
+            <p class="aula-slide-kicker">Imagem 2 de 3</p>
+            <h3>Perfil do colaborador</h3>
+            <p>Área de perfil com informações do colaborador, status, dados profissionais, assiduidade e recursos de acompanhamento.</p>
+            <div class="aula-tags"><span>Perfil</span><span>Dados internos</span><span>Dashboard</span></div>
+          </div>
+        </article>
+
+        <article class="aula-slide">
+          <img src="assets/portal-preferencias.jpeg" alt="Tela de preferências da conta do Portal do Colaborador">
+          <div class="aula-slide-conteudo">
+            <p class="aula-slide-kicker">Imagem 3 de 3</p>
+            <h3>Preferências da conta</h3>
+            <p>Configurações de contato, disponibilidade, apresentação pessoal e prévia do perfil exibido no portal.</p>
+            <div class="aula-tags"><span>Preferências</span><span>Disponibilidade</span><span>React</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+    <p class="aulas-autoavanco">As imagens avançam automaticamente a cada 5 segundos.</p>
+  </dialog>
+
+  <dialog class="aulas-modal crm-modal" id="crm-modal" aria-labelledby="crm-modal-titulo">
+    <div class="aulas-modal-cabecalho">
+      <div>
+        <p class="projeto-kicker">Projeto Aliest</p>
+        <h2 id="crm-modal-titulo">CRM Aliest</h2>
+      </div>
+      <button class="habilidade-modal-fechar crm-modal-fechar" type="button" aria-label="Fechar projeto">×</button>
+    </div>
+
+    <p class="crm-resumo">
+      Plataforma interna desenvolvida para centralizar e organizar a operação de relacionamento com clientes,
+      reunindo Kanban de leads, mensagens, distribuição de atendimentos, filtros, indicadores e configurações.
+      A aplicação foi criada com foco em uma experiência moderna, intuitiva e responsiva, com integração ao Chatwoot.
+    </p>
+
+    <div class="aulas-controles">
+      <button class="aulas-controle" type="button" id="crm-anterior" aria-label="Imagem anterior">‹</button>
+      <div class="aulas-indicadores" id="crm-indicadores" aria-label="Selecionar imagem do CRM">
+        <button class="aula-indicador ativo" type="button" data-crm-slide="0" aria-label="Ver central de mensagens" aria-current="true"></button>
+        <button class="aula-indicador" type="button" data-crm-slide="1" aria-label="Ver central de configurações"></button>
+        <button class="aula-indicador" type="button" data-crm-slide="2" aria-label="Ver tela de acesso ao CRM"></button>
+      </div>
+      <button class="aulas-controle" type="button" id="crm-proxima" aria-label="Próxima imagem">›</button>
+    </div>
+
+    <div class="aulas-carrossel" id="crm-carrossel">
+      <div class="aulas-track" id="crm-track">
+        <article class="aula-slide">
+          <img src="assets/crm-mensagens.jpeg" alt="Central de mensagens do CRM Aliest">
+          <div class="aula-slide-conteudo">
+            <p class="aula-slide-kicker">Imagem 1 de 3</p>
+            <h3>Central de mensagens</h3>
+            <p>Área para acompanhar conversas, priorizar atendimentos pendentes e filtrar a fila por time, consultor ou mensagem.</p>
+            <div class="aula-tags"><span>Atendimento</span><span>Chatwoot</span><span>Filtros</span></div>
+          </div>
+        </article>
+
+        <article class="aula-slide">
+          <img src="assets/crm-configuracoes.jpeg" alt="Central de configurações do CRM Aliest">
+          <div class="aula-slide-conteudo">
+            <p class="aula-slide-kicker">Imagem 2 de 3</p>
+            <h3>Central de configurações</h3>
+            <p>Área para personalizar o funcionamento do CRM, acessos, permissões, filas, times, avisos e integrações.</p>
+            <div class="aula-tags"><span>Permissões</span><span>Configurações</span><span>Integrações</span></div>
+          </div>
+        </article>
+
+        <article class="aula-slide">
+          <img src="assets/crm-login.jpeg" alt="Tela de acesso ao CRM Aliest">
+          <div class="aula-slide-conteudo">
+            <p class="aula-slide-kicker">Imagem 3 de 3</p>
+            <h3>Tela de acesso ao CRM</h3>
+            <p>Entrada segura no ambiente da operação, com autenticação, opção de lembrar sessão e acesso ao fluxo comercial.</p>
+            <div class="aula-tags"><span>Acesso</span><span>Autenticação</span><span>Operação comercial</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+    <p class="aulas-autoavanco">As imagens avançam automaticamente a cada 5 segundos.</p>
+  </dialog>
+
+  <dialog class="aulas-modal" id="aulas-modal" aria-labelledby="aulas-modal-titulo">
+    <div class="aulas-modal-cabecalho">
+      <div>
+        <p class="projeto-kicker">Carrossel de repositórios</p>
+        <h2 id="aulas-modal-titulo">Repositório de aulas - GitHub</h2>
+      </div>
+      <button class="habilidade-modal-fechar aulas-modal-fechar" type="button" aria-label="Fechar repositórios">×</button>
+    </div>
+
+    <div class="aulas-controles">
+      <button class="aulas-controle" type="button" id="aulas-anterior" aria-label="Repositório anterior">‹</button>
+      <div class="aulas-indicadores" id="aulas-indicadores" aria-label="Selecionar repositório">
+        <button class="aula-indicador ativo" type="button" data-aula="0" aria-label="Ver repositório 1" aria-current="true"></button>
+        <button class="aula-indicador" type="button" data-aula="1" aria-label="Ver repositório 2"></button>
+        <button class="aula-indicador" type="button" data-aula="2" aria-label="Ver repositório 3"></button>
+      </div>
+      <button class="aulas-controle" type="button" id="aulas-proxima" aria-label="Próximo repositório">›</button>
+    </div>
+
+    <div class="aulas-carrossel" id="aulas-carrossel">
+      <div class="aulas-track" id="aulas-track">
+        <article class="aula-slide">
+          <img src="assets/aulas-c.svg" alt="Imagem ilustrativa sobre algoritmo e pensamento computacional com linguagem C">
+          <div class="aula-slide-conteudo">
+            <p class="aula-slide-kicker">Repositório 1 de 3 · Imagem ilustrativa</p>
+            <h3>Algoritmo e Pensamento Computacional</h3>
+            <p>
+              Conteúdos e exercícios introdutórios para desenvolver raciocínio lógico, estruturas de decisão,
+              repetição, funções e resolução de problemas utilizando a linguagem C.
+            </p>
+            <div class="aula-tags"><span>C</span><span>Algoritmos</span><span>Lógica</span></div>
+            <a class="aula-github" href="https://github.com/felipeiori11/Algoritimo-e-Pensamento-Computacional-em-C" target="_blank" rel="noopener">Ver no GitHub</a>
+          </div>
+        </article>
+
+        <article class="aula-slide">
+          <img src="assets/aulas-banco.svg" alt="Imagem ilustrativa sobre modelagem de banco de dados">
+          <div class="aula-slide-conteudo">
+            <p class="aula-slide-kicker">Repositório 2 de 3 · Imagem ilustrativa</p>
+            <h3>Modelagem de Banco de Dados</h3>
+            <p>
+              Estudos sobre organização de informações, entidades, atributos, relacionamentos e estruturação de
+              modelos para representar dados de forma consistente.
+            </p>
+            <div class="aula-tags"><span>Banco de dados</span><span>Modelagem</span><span>Relacionamentos</span></div>
+            <a class="aula-github" href="https://github.com/felipeiori11/Modulagem-de-Banco-de-Dados" target="_blank" rel="noopener">Ver no GitHub</a>
+          </div>
+        </article>
+
+        <article class="aula-slide">
+          <img src="assets/aulas-web.svg" alt="Imagem ilustrativa sobre desenvolvimento web com HTML, CSS e JavaScript">
+          <div class="aula-slide-conteudo">
+            <p class="aula-slide-kicker">Repositório 3 de 3 · Imagem ilustrativa</p>
+            <h3>Desenvolvimento Web</h3>
+            <p>
+              Práticas de construção de páginas e interfaces utilizando HTML para estrutura, CSS para estilo e
+              JavaScript para comportamento e interatividade.
+            </p>
+            <div class="aula-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+            <a class="aula-github" href="https://github.com/felipeiori11/Desenvolvimento-Web" target="_blank" rel="noopener">Ver no GitHub</a>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <p class="aulas-autoavanco">As imagens avançam automaticamente a cada 5 segundos.</p>
+  </dialog>
+
+
+
+  <script src="script.js"></script>
+  <script src="floating-dock.js"></script>
+</body>
+</html>

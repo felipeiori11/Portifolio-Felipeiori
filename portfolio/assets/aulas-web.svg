@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Desenvolvimento Web com HTML, CSS e JavaScript</title>
+  <desc id="desc">Ilustração de uma interface web com HTML, CSS e JavaScript.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#102c40"/>
+      <stop offset="1" stop-color="#0f5365"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d8f0f1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="28" fill="url(#bg)"/>
+  <circle cx="1030" cy="570" r="190" fill="#ff916e" opacity=".14"/>
+  <text x="72" y="92" fill="#ffffff" font-family="Arial, sans-serif" font-size="30" font-weight="700">DESENVOLVIMENTO WEB</text>
+  <text x="72" y="130" fill="#a9e6e8" font-family="Arial, sans-serif" font-size="22">HTML · CSS · JavaScript</text>
+  <rect x="72" y="178" width="670" height="385" rx="18" fill="url(#panel)"/>
+  <rect x="72" y="178" width="670" height="50" rx="18" fill="#e4f7f7"/>
+  <circle cx="108" cy="203" r="8" fill="#ff7d68"/><circle cx="136" cy="203" r="8" fill="#f7c957"/><circle cx="164" cy="203" r="8" fill="#4fc3a1"/>
+  <rect x="230" y="191" width="360" height="24" rx="12" fill="#c4e4e5"/>
+  <text x="112" y="277" fill="#e65f4c" font-family="monospace" font-size="22">&lt;main&gt;</text>
+  <text x="146" y="316" fill="#166d76" font-family="monospace" font-size="22">&lt;h1&gt;Olá, web!&lt;/h1&gt;</text>
+  <text x="146" y="355" fill="#4f7f85" font-family="monospace" font-size="22">&lt;button&gt;Explorar&lt;/button&gt;</text>
+  <text x="112" y="394" fill="#e65f4c" font-family="monospace" font-size="22">&lt;/main&gt;</text>
+  <line x1="112" y1="430" x2="690" y2="430" stroke="#b9d9da" stroke-width="2"/>
+  <text x="112" y="470" fill="#2c8e95" font-family="monospace" font-size="21">.card {</text>
+  <text x="146" y="505" fill="#e58b32" font-family="monospace" font-size="21">display: flex;</text>
+  <text x="112" y="540" fill="#2c8e95" font-family="monospace" font-size="21">}</text>
+  <rect x="800" y="220" width="310" height="280" rx="22" fill="#ffffff" opacity=".96"/>
+  <rect x="800" y="220" width="310" height="74" rx="22" fill="#ff7c66"/>
+  <text x="838" y="267" fill="#ffffff" font-family="Arial, sans-serif" font-size="22" font-weight="700">INTERFACE WEB</text>
+  <rect x="838" y="332" width="232" height="18" rx="9" fill="#a9e6e8"/>
+  <rect x="838" y="366" width="178" height="18" rx="9" fill="#d8eeee"/>
+  <rect x="838" y="416" width="116" height="42" rx="21" fill="#12365d"/>
+  <text x="863" y="443" fill="#ffffff" font-family="Arial, sans-serif" font-size="16" font-weight="700">Interagir</text>
+  <path d="M760 360h35" stroke="#ffb19f" stroke-width="5" stroke-linecap="round"/>
+  <path d="M780 346l18 14-18 14" fill="none" stroke="#ffb19f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

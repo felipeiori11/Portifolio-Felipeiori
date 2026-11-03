@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Algoritmo e Pensamento Computacional com linguagem C</title>
+  <desc id="desc">Ilustração de um editor de código em C com estruturas de decisão e repetição.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1b2b"/>
+      <stop offset="1" stop-color="#12365d"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#49c6a8"/>
+      <stop offset="1" stop-color="#6ed6ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="28" fill="url(#bg)"/>
+  <circle cx="1080" cy="90" r="190" fill="#2f6fa3" opacity=".18"/>
+  <circle cx="110" cy="600" r="170" fill="#49c6a8" opacity=".1"/>
+  <text x="72" y="92" fill="#ffffff" font-family="Arial, sans-serif" font-size="27" font-weight="700">ALGORITMO &amp; PENSAMENTO COMPUTACIONAL</text>
+  <text x="72" y="130" fill="#9fdcf0" font-family="Arial, sans-serif" font-size="22">Linguagem C</text>
+  <rect x="72" y="178" width="650" height="384" rx="18" fill="#09131f" stroke="#335979" stroke-width="2"/>
+  <rect x="72" y="178" width="650" height="52" rx="18" fill="#142b40"/>
+  <circle cx="106" cy="204" r="8" fill="#ff6b6b"/><circle cx="134" cy="204" r="8" fill="#ffd166"/><circle cx="162" cy="204" r="8" fill="#49c6a8"/>
+  <text x="205" y="212" fill="#8aa4b9" font-family="monospace" font-size="16">algoritmo.c</text>
+  <text x="112" y="278" fill="#6ed6ff" font-family="monospace" font-size="21">#include &lt;stdio.h&gt;</text>
+  <text x="112" y="316" fill="#d8e7f1" font-family="monospace" font-size="21">int main() {</text>
+  <text x="146" y="354" fill="#f5c76a" font-family="monospace" font-size="21">int valor = 10;</text>
+  <text x="146" y="392" fill="#c997ff" font-family="monospace" font-size="21">if (valor &gt; 0) {</text>
+  <text x="180" y="430" fill="#49c6a8" font-family="monospace" font-size="21">printf("Processar");</text>
+  <text x="146" y="468" fill="#c997ff" font-family="monospace" font-size="21">}</text>
+  <text x="112" y="506" fill="#d8e7f1" font-family="monospace" font-size="21">return 0;</text>
+  <text x="112" y="544" fill="#d8e7f1" font-family="monospace" font-size="21">}</text>
+  <path d="M790 278h250" stroke="url(#accent)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M790 278l-22-14v28z" fill="#49c6a8"/>
+  <rect x="820" y="326" width="250" height="92" rx="18" fill="#ffffff" opacity=".96"/>
+  <text x="850" y="364" fill="#12365d" font-family="Arial, sans-serif" font-size="19" font-weight="700">Entrada</text>
+  <text x="850" y="394" fill="#5b6670" font-family="Arial, sans-serif" font-size="17">dados e condições</text>
+  <rect x="820" y="454" width="250" height="92" rx="18" fill="#49c6a8"/>
+  <text x="850" y="492" fill="#09202d" font-family="Arial, sans-serif" font-size="19" font-weight="700">Saída</text>
+  <text x="850" y="522" fill="#09202d" font-family="Arial, sans-serif" font-size="17">resultado do algoritmo</text>
+</svg>

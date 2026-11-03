@@ -1,0 +1,107 @@
+:root {
+  --surface: #fff;
+  --surface-subtle: #fafafa;
+  --surface-hover: #f0f0f0;
+  --text-strong: #404040;
+  --text-soft: #737373;
+}
+
+/* Keep the theme controls outside the scrolling navigation. */
+.top-navigation { display: flex; align-items: center; }
+.dock-rail { min-width: 0; flex: 1 1 auto; }
+.theme-switch {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 3px;
+  margin: 0 12px 0 0;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-subtle);
+}
+.theme-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-soft);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.theme-option svg { width: 16px; height: 16px; }
+.theme-option:hover { background: var(--surface-hover); color: var(--text-strong); }
+.theme-option[aria-pressed="true"] {
+  border-color: var(--line);
+  background: var(--surface);
+  color: var(--text-strong);
+  box-shadow: 0 1px 4px #0000000d;
+}
+
+/* Black surfaces and readable neutral colors throughout the portfolio. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --primary: #ededed;
+  --secondary: #b3b3b3;
+  --muted: #080808;
+  --line: #303030;
+  --accent: #38bdf8;
+  --surface: #121212;
+  --surface-subtle: #1c1c1c;
+  --surface-hover: #292929;
+  --text-strong: #ededed;
+  --text-soft: #b3b3b3;
+}
+[data-theme="dark"] .page-surface,
+[data-theme="dark"] .skip-link,
+[data-theme="dark"] dialog {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--primary);
+}
+[data-theme="dark"] h1 { background-image: linear-gradient(100deg, #fafafa 10%, #a3a3a3 95%); }
+[data-theme="dark"] :is(.highlight, .experiencia-logo, .habilidade-link, .botao, .habilidade-modal-fechar, .aulas-controle) {
+  background: var(--surface-subtle);
+  border-color: var(--line);
+  color: var(--primary);
+}
+[data-theme="dark"] :is(.botao, .habilidade-modal-fechar, .aulas-controle):hover {
+  background: var(--surface-hover);
+  border-color: #525252;
+}
+[data-theme="dark"] .texto .botao { background: #ededed; color: #121212; border-color: #ededed; }
+[data-theme="dark"] .texto .botao:hover { background: #d4d4d4; }
+[data-theme="dark"] :is(.text-link, .tech-item, .rodape, .formacao-periodo, .formacao-tipo, .detalhe, .projeto-kicker, .contatos dt, .aulas-autoavanco) { color: var(--secondary); }
+[data-theme="dark"] :is(.titulo, .tech-mark[data-tech="C"]) { color: var(--primary); }
+[data-theme="dark"] :is(.text-link, .rodape a, .habilidade-link, .contatos a):hover { color: var(--accent); }
+[data-theme="dark"] :is(.home-contact, .formacao-item, .experiencia-card, .linhas li, .projetos-miniabas, .workflow-card, .contatos dt, .contatos dd, .curriculo-modal-pdf, .aulas-carrossel, .project-row > img, .projeto-card > img) { border-color: var(--line); }
+[data-theme="dark"] :is(.project-row, .projeto-card):hover { background: var(--surface-subtle); }
+[data-theme="dark"] :is(.projeto-tags span, .aula-tags span) { background: var(--surface-subtle); color: var(--secondary); }
+[data-theme="dark"] .formacao-status,
+[data-theme="dark"] .experiencia-status { background: #052e22; color: #6ee7b7; }
+[data-theme="dark"] .formacao-status--cursando { background: #082f49; color: #7dd3fc; }
+[data-theme="dark"] .experiencia-empresa { color: #6ee7b7; }
+[data-theme="dark"] .projetos-miniaba { color: var(--secondary); }
+[data-theme="dark"] .projetos-miniaba.ativa { color: #7dd3fc; }
+[data-theme="dark"] :is(.curriculo-modal-pdf, .aula-slide > img) { background: var(--surface-subtle); }
+[data-theme="dark"] .aula-indicador { background: #525252; }
+[data-theme="dark"] .aula-indicador.ativo { background: var(--accent); }
+[data-theme="dark"] .project-card-action-primary:hover { background: #d4d4d4; }
+[data-theme="dark"] dialog::backdrop { background: #000b; }
+[data-theme="dark"] .floating-dock .dock-item:focus-visible { background: #292929; border-color: #525252; color: #ededed; }
+[data-theme="dark"] .floating-dock .dock-item[data-curriculo-modal]:hover { background: #1d4ed8; border-color: #1d4ed8; }
+
+@media (max-width: 600px) {
+  .top-navigation:has(.theme-switch:not([hidden])) { flex-direction: column; align-items: stretch; }
+  .theme-switch { align-self: flex-end; margin: 0 10px 8px; padding: 3px; border-radius: 12px; }
+  .theme-option { min-height: 36px; padding: 6px 10px; border-radius: 8px; }
+  html:has(.theme-switch:not([hidden])) { scroll-padding-top: 168px; }
+  body:has(.theme-switch:not([hidden])) .page-shell { padding-top: 162px; }
+  body:has(.theme-switch:not([hidden])) .page-surface { min-height: calc(100dvh - 162px); }
+}
